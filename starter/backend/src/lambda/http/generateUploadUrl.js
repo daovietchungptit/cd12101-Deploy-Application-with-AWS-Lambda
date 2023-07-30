@@ -2,7 +2,7 @@ import middy from '@middy/core'
 import httpErrorHandler from '@middy/http-error-handler'
 import cors from '@middy/http-cors'
 import { getTodo, updateTodo } from '../../businessLogic/todos.mjs'
-import { getUploadUrl, BUCKET_NAME } from '../../businessLogic/files.mjs'
+import { getUploadUrl, BUCKET_NAME } from '../../fileStorage/attachmentUtils.mjs'
 import { randomUUID } from 'crypto'
 
 export const handler = middy()

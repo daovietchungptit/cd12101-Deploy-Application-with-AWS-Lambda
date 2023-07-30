@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "todo",
+  "title": "update todo request schema",
   "type": "object",
   "properties": {
     "name": {

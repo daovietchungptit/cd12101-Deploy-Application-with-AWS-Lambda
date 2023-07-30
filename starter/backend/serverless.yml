@@ -3,7 +3,6 @@ service: serverless-todo-app
 plugins:
   - serverless-iam-roles-per-function
   - serverless-reqvalidator-plugin
-  - serverless-aws-documentation
 
 frameworkVersion: '3'
 
@@ -32,20 +31,6 @@ provider:
             - "xray:PutTelemetryRecords"
           Resource:
             - "*"
-custom:
-  documentation:
-    api:
-      info:
-        version: "1.0.0"
-        title: "My API"
-        description: "This is my API"
-    models:
-      - name: CreateTodoRequest
-        contentType: "application/json"
-        schema: ${file(models/create-todo-request.json)}
-      - name: UpdateTodoRequest
-        contentType: "application/json"
-        schema: ${file(models/update-todo-request.json)}
 
 functions:
   Auth:
@@ -74,16 +59,14 @@ functions:
     handler: src/lambda/http/createTodo.handler
     events:
       - http:
-          documentation:
-            summary: "Create todo item"
-            description: "Create new todo item"
-            requestModels:
-              "application/json": CreateTodoRequest
           method: post
           authorizer: Auth
           path: todos
           cors: true
-          reqValidatorName: 'xMyRequestValidator'
+          reqValidatorName: xMyRequestValidator
+          request:
+            schemas:
+              application/json: ${file(src/models/create-todo-request.json)}
     iamRoleStatementsInherit: true
     iamRoleStatements:
       - Effect: Allow
@@ -96,16 +79,14 @@ functions:
     handler: src/lambda/http/updateTodo.handler
     events:
       - http:
-          documentation:
-            summary: "Update todo item"
-            description: "Update todo item"
-            requestModels:
-              "application/json": UpdateTodoRequest
           method: patch
           authorizer: Auth
           path: todos/{todoId}
           cors: true
-          reqValidatorName: 'xMyRequestValidator'
+          reqValidatorName: xMyRequestValidator
+          request:
+            schemas:
+              application/json: ${file(src/models/update-todo-request.json)}
     iamRoleStatementsInherit: true
     iamRoleStatements:
       - Effect: Allow
